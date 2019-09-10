@@ -9,6 +9,10 @@ parameters:
         Some/Name/Space/modelNotFound: Some/Name/Space/HttpNotFound;
 
 services:
+    _instanceof:
+        App\Service\HandlerAutowired\HandlerInterface:
+            tags: ['app.handler_autowired']
+
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
@@ -20,7 +24,9 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/*'
-        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+        exclude:
+            - '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+            - '../src/Service/HandlerAutowired'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
@@ -44,3 +50,42 @@ services:
         shared: false
 
     App\Entity\MyCollectionInterface: '@App\Entity\MyCollection'
+
+    App\Service\Handler\HandlerManager:
+        autoconfigure: false
+
+    App\Service\HandlerAutowired\HandlerManager:
+        autoconfigure: false
+        arguments: [!tagged app.handler_autowired]
+
+    App\Service\Handler\NumberHandler:
+        arguments:
+            $format: '^^^^^^^^^%s^^^^^^^^^^^^^'
+    App\Service\Handler\StringHandler:
+        arguments:
+            $format: '(")%s(")'
+
+
+
+    App\Service\HandlerAutowired\HandlerInterface: '@App\Service\HandlerAutowired\HandlerManager'
+    App\Service\Handler\HandlerInterface: '@App\Service\Handler\HandlerManager'
+
+    app.handler.number_3:
+        class: App\Service\Handler\NumberHandler
+        arguments:
+            $format: '^^^^^^^^^%s^^^^^^^^^^^^^'
+
+    app.handler.number_1:
+        class: App\Service\Handler\NumberHandler
+        arguments:
+            $format: '"%s"'
+
+    app.handler.number_2:
+        class: App\Service\Handler\NumberHandler
+        arguments:
+            $format: '<%s>'
+
+    app.handler.string_1:
+        class: App\Service\Handler\StringHandler
+        arguments:
+            $format: '(")%s(")'

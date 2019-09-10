@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\DependencyInjection\Compiler\CompilerPass;
+use App\Service\Handler\HandlerInterface;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Resource\FileResource;
@@ -24,6 +26,17 @@ class Kernel extends BaseKernel
             }
         }
     }
+
+    protected function build(ContainerBuilder $container)
+    {
+        parent::build($container);
+
+        $container->registerForAutoconfiguration(HandlerInterface::class)
+            ->addTag('app.handler')
+        ;
+        $container->addCompilerPass(new CompilerPass());
+    }
+
 
     public function getProjectDir(): string
     {
