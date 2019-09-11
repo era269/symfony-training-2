@@ -4,16 +4,20 @@ declare(strict_types=1);
 namespace App\Controller;
 
 
+use App\Service\CalculatorAwareInterface;
 use App\Service\CalculatorInterface;
 use App\Service\Handler\HandlerInterface;
+use App\Service\Traits\CalculatorAwareTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
-class DefaultController extends AbstractController
+class DefaultController extends AbstractController implements CalculatorAwareInterface
 {
-    public function index(Request $request, CalculatorInterface $calculator, HandlerInterface $handlerManager, \App\Service\HandlerAutowired\HandlerInterface $handlerAutowired)
+    use CalculatorAwareTrait;
+
+    public function index(Request $request, HandlerInterface $handlerManager, \App\Service\HandlerAutowired\HandlerInterface $handlerAutowired)
     {//http://localhost:8080/?a=1&b=3
-        $result = $calculator->calculate(
+        $result = $this->getCalculator()->calculate(
             (int)$request->get('a'),
             (int)$request->get('b')
         );
