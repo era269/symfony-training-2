@@ -13,7 +13,7 @@ class NumberHandler extends AbstractHandler  implements HandlerInterface
         if (!ctype_digit($value)) {
             throw new \Exception('Wrong value type');
         }
-        return sprintf($this->getFormat(), $value);
+        return sprintf($this->getFormat() . $this->getMessage(), $value);
     }
 
     public function supports($value, array $context = []): bool

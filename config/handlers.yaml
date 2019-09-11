@@ -1,0 +1,35 @@
+services:
+    _instanceof:
+        App\Service\HandlerAutowired\HandlerInterface:
+            tags: ['app.handler_autowired']
+
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    app.handler.number_3:
+        class: App\Service\HandlerAutowired\NumberHandler
+        arguments:
+            $format: '^^^^^^^^^%s^^^^^^^^^^^^^'
+        calls:
+            - { method: setMessage, arguments: ['this is number handler 3'] }
+
+    app.handler.number_1:
+        class: App\Service\HandlerAutowired\NumberHandler
+        arguments:
+            $format: '"%s"'
+
+    app.handler.number_2:
+        class: App\Service\HandlerAutowired\NumberHandler
+        arguments:
+            $format: '<%s>'
+        calls:
+            - { method: setMessage, arguments: ['this is number handler 2'] }
+
+    app.handler.string_1:
+        class: App\Service\HandlerAutowired\StringHandler
+        arguments:
+            $format: '(")%s(")'
+        calls:
+            - { method: setMessage, arguments: ['this is string handler 1'] }

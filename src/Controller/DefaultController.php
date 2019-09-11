@@ -28,9 +28,9 @@ class DefaultController extends AbstractController implements CalculatorAwareInt
                 $handlerManager('??' . $result),
                 ],
             'result_autowired' => [
-                $handlerManager($result),
+                $handlerAutowired($result),
 //                ($handlerManager->createNumber2Handler())($result),
-                $handlerManager('??' . $result),
+                $handlerAutowired('??' . $result),
                 ],
         ];
 

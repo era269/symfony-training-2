@@ -8,10 +8,13 @@ parameters:
     app.exception.map:
         Some/Name/Space/modelNotFound: Some/Name/Space/HttpNotFound;
 
+imports:
+    - { resource: handlers.yaml }
+
 services:
-    _instanceof:
-        App\Service\HandlerAutowired\HandlerInterface:
-            tags: ['app.handler_autowired']
+#    _instanceof:
+#        App\Service\HandlerAutowired\HandlerInterface:
+#            tags: ['app.handler_autowired']
 
     # default configuration for services in *this* file
     _defaults:
@@ -54,38 +57,22 @@ services:
     App\Service\Handler\HandlerManager:
         autoconfigure: false
 
-    App\Service\HandlerAutowired\HandlerManager:
-        autoconfigure: false
-        arguments: [!tagged app.handler_autowired]
-
     App\Service\Handler\NumberHandler:
         arguments:
             $format: '^^^^^^^^^%s^^^^^^^^^^^^^'
+        calls:
+            - { method: setMessage, arguments: ['this is App\Service\Handler\NumberHandler'] }
     App\Service\Handler\StringHandler:
         arguments:
             $format: '(")%s(")'
+        calls:
+            - { method: setMessage, arguments: ['this is App\Service\Handler\StringHandler'] }
+    App\Service\Handler\HandlerInterface: '@App\Service\Handler\HandlerManager'
+
+
 
 
 
     App\Service\HandlerAutowired\HandlerInterface: '@App\Service\HandlerAutowired\HandlerManager'
-    App\Service\Handler\HandlerInterface: '@App\Service\Handler\HandlerManager'
-
-    app.handler.number_3:
-        class: App\Service\Handler\NumberHandler
-        arguments:
-            $format: '^^^^^^^^^%s^^^^^^^^^^^^^'
-
-    app.handler.number_1:
-        class: App\Service\Handler\NumberHandler
-        arguments:
-            $format: '"%s"'
-
-    app.handler.number_2:
-        class: App\Service\Handler\NumberHandler
-        arguments:
-            $format: '<%s>'
-
-    app.handler.string_1:
-        class: App\Service\Handler\StringHandler
-        arguments:
-            $format: '(")%s(")'
+    App\Service\HandlerAutowired\HandlerManager:
+        arguments: [!tagged app.handler_autowired]

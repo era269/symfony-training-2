@@ -14,7 +14,7 @@ class StringHandler extends AbstractHandler  implements HandlerInterface
             throw new \Exception('Wrong value type');
         }
 
-        return sprintf($this->getFormat(), $value);
+        return sprintf($this->getFormat() . $this->getMessage(), $value);
     }
 
 
