@@ -5,22 +5,12 @@ declare(strict_types=1);
 namespace App\Service\Handler;
 
 
+use App\Service\NumberType;
+use App\Service\StringType;
+use App\Service\Traits\StringHandlerTrait;
+
 class StringHandler extends AbstractHandler  implements HandlerInterface
 {
-
-    public function __invoke($value)
-    {
-        if (!is_string($value)) {
-            throw new \Exception('Wrong value type');
-        }
-
-        return sprintf($this->getFormat() . $this->getMessage(), $value);
-    }
-
-
-    public function supports($value, array $context = []): bool
-    {
-        return is_string($value);
-    }
+    use StringHandlerTrait;
 
 }

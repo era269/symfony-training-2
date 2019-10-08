@@ -59,12 +59,12 @@ services:
 
     App\Service\Handler\NumberHandler:
         arguments:
-            $format: '^^^^^^^^^%s^^^^^^^^^^^^^'
+            $format: 'manual_number_with_call^%s^'
         calls:
             - { method: setMessage, arguments: ['this is App\Service\Handler\NumberHandler'] }
     App\Service\Handler\StringHandler:
         arguments:
-            $format: '(")%s(")'
+            $format: 'manual_string_with_call~%s~'
         calls:
             - { method: setMessage, arguments: ['this is App\Service\Handler\StringHandler'] }
     App\Service\Handler\HandlerInterface: '@App\Service\Handler\HandlerManager'

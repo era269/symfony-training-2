@@ -3,6 +3,8 @@
 namespace App;
 
 use App\DependencyInjection\Compiler\CompilerPass;
+use App\DependencyInjection\Compiler\EventDispatcherCompilerPass;
+use App\Service\Events\ListenerInterface;
 use App\Service\Handler\HandlerInterface;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -10,6 +12,7 @@ use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
+use function dirname;
 
 class Kernel extends BaseKernel
 {
@@ -34,13 +37,17 @@ class Kernel extends BaseKernel
         $container->registerForAutoconfiguration(HandlerInterface::class)
             ->addTag('app.handler')
         ;
-        $container->addCompilerPass(new CompilerPass());
+
+        $container->registerForAutoconfiguration(ListenerInterface::class)
+            ->addTag(EventDispatcherCompilerPass::TAG_NAME)
+        ;
+        $container->addCompilerPass(new EventDispatcherCompilerPass());
     }
 
 
     public function getProjectDir(): string
     {
-        return \dirname(__DIR__);
+        return dirname(__DIR__);
     }
 
     protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void

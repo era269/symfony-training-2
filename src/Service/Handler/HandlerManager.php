@@ -12,11 +12,6 @@ class HandlerManager implements HandlerInterface
      */
     private $handlers;
 
-//    public function __construct(iterable $handlers )
-//    {
-//        $this->handlers = $handlers;
-//    }
-//
     public function __invoke($value, $context = []): string
     {
         return ($this->getHandler($value, $context))($value);

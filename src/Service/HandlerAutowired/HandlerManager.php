@@ -48,5 +48,4 @@ class HandlerManager implements HandlerInterface
         return null !== $this->getHandler($value, $context);
     }
 
-
 }

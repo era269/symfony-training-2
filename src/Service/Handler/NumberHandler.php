@@ -5,19 +5,10 @@ declare(strict_types=1);
 namespace App\Service\Handler;
 
 
+use App\Service\NumberType;
+use App\Service\Traits\NumberHandlerTrait;
+
 class NumberHandler extends AbstractHandler  implements HandlerInterface
 {
-
-    public function __invoke($value)
-    {
-        if (!ctype_digit($value)) {
-            throw new \Exception('Wrong value type');
-        }
-        return sprintf($this->getFormat() . $this->getMessage(), $value);
-    }
-
-    public function supports($value, array $context = []): bool
-    {
-        return ctype_digit($value);
-    }
+    use NumberHandlerTrait;
 }

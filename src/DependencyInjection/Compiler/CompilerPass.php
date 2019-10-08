@@ -4,7 +4,7 @@
 namespace App\DependencyInjection\Compiler;
 
 
-use App\Service\Handler\HandlerManager;
+use App\Service\Handler\EventDistapcher;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -15,7 +15,7 @@ class CompilerPass implements CompilerPassInterface
     {
         $taggedServices = $container->findTaggedServiceIds('app.handler');
 
-        $definition = $container->findDefinition(HandlerManager::class);
+        $definition = $container->findDefinition(EventDistapcher::class);
 
         foreach ($taggedServices as $id => $tags) {
             // add the transport service to the TransportChain service

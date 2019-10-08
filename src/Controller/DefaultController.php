@@ -6,7 +6,11 @@ namespace App\Controller;
 
 use App\Service\CalculatorAwareInterface;
 use App\Service\CalculatorInterface;
+use App\Service\Events\Event;
+use App\Service\Events\EventDispatcher;
 use App\Service\Handler\HandlerInterface;
+use App\Service\NumberType;
+use App\Service\StringType;
 use App\Service\Traits\CalculatorAwareTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,22 +25,30 @@ class DefaultController extends AbstractController implements CalculatorAwareInt
             (int)$request->get('a'),
             (int)$request->get('b')
         );
+        $number = new NumberType($result);
+        $string = new StringType((string)$result);
         $data = [
             'result' => [
-                $handlerManager($result),
-//                ($handlerManager->createNumber2Handler())($result),
-                $handlerManager('??' . $result),
+                $handlerManager($number),
+                $handlerManager($string),
                 ],
             'result_autowired' => [
-                $handlerAutowired($result),
-//                ($handlerManager->createNumber2Handler())($result),
-                $handlerAutowired('??' . $result),
+                $handlerAutowired($number),
+                $handlerAutowired($string),
                 ],
         ];
 
-//        $response = new JsonResponse($data);
-
-
         return $this->json($data);
+    }
+
+    public function listener(EventDispatcher $eventDispatcher)
+    {
+        $eventNumber = new Event(new NumberType(123));
+        $eventString = new Event(new StringType('some_string'));
+
+        $eventDispatcher->dispatch($eventNumber);
+        $eventDispatcher->dispatch($eventString);
+
+        return $this->json([$eventString, $eventNumber]);
     }
 }

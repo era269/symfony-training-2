@@ -11,25 +11,25 @@ services:
     app.handler.number_3:
         class: App\Service\HandlerAutowired\NumberHandler
         arguments:
-            $format: '^^^^^^^^^%s^^^^^^^^^^^^^'
+            $format: 'autowired_number^%s^'
         calls:
             - { method: setMessage, arguments: ['this is number handler 3'] }
 
     app.handler.number_1:
         class: App\Service\HandlerAutowired\NumberHandler
         arguments:
-            $format: '"%s"'
+            $format: 'autowired_number^%s'
 
     app.handler.number_2:
         class: App\Service\HandlerAutowired\NumberHandler
         arguments:
-            $format: '<%s>'
+            $format: 'autowired_number^%s'
         calls:
             - { method: setMessage, arguments: ['this is number handler 2'] }
 
     app.handler.string_1:
         class: App\Service\HandlerAutowired\StringHandler
         arguments:
-            $format: '(")%s(")'
+            $format: 'autowired_string^%s~'
         calls:
             - { method: setMessage, arguments: ['this is string handler 1'] }
